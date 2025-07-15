@@ -1,0 +1,9 @@
+# Ignore outputs
+output.*
+cfg.png
+*.mmd
+*.png
+*.json
+__pycache__/
+*.pyc
+
