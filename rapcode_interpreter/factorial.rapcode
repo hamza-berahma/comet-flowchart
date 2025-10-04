@@ -1,0 +1,12 @@
+n := INPUT("Enter a positive integer (n):")
+result := 1
+IF NOT (n <= 0) THEN
+  LOOP
+    IF (n <= 1) THEN
+      BREAK
+    ENDIF
+    result := (result * n)
+    n := (n - 1)
+  ENDLOOP
+ENDIF
+OUTPUT result

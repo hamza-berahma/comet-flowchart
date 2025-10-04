@@ -1,0 +1,42 @@
+// --- Binary Search Guessing Game ---
+// The computer will try to guess a number you think of between 1 and 100.
+
+OUTPUT "Think of a number between 1 and 100."
+OUTPUT "After each guess, I will ask you if my guess was too (h)igh, too (l)ow, or (c)orrect."
+OUTPUT "Let's begin!"
+
+low := 1
+high := 100
+guess_count := 0
+
+LOOP
+// Calculate the midpoint. The interpreter will handle the division.
+guess := (low + high) / 2
+guess_count := guess_count + 1
+
+OUTPUT "-----------------------------"
+OUTPUT "My guess is:"
+OUTPUT guess
+
+feedback := INPUT("So, is your number higher (l), lower (h), or correct (c)?")
+
+IF feedback = "c" THEN
+BREAK
+ENDIF
+
+IF feedback = "h" THEN
+// My guess was too high, so the number must be in the lower half.
+high := guess - 1
+ENDIF
+
+IF feedback = "l" THEN
+// My guess was too low, so the number must be in the upper half.
+low := guess + 1
+ENDIF
+
+ENDLOOP
+
+OUTPUT "============================="
+OUTPUT "Great! I guessed your number."
+OUTPUT "It took me this many guesses:"
+OUTPUT guess_count

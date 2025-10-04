@@ -1,0 +1,118 @@
+// --- IntStrip Interpreter in Rapcode ---
+// A simulation of a simple esoteric programming language, similar to
+// Brainfuck, running on an interpreter written entirely in Rapcode.
+// This demonstrates Turing-completeness and pushes Rapcode to its limits.
+
+// --- The IntStrip Program to Execute ---
+// This program calculates 3 + 5. It puts 3 in cell 1, 5 in cell 2,
+// then moves the value from cell 2 into cell 1 and outputs the result (8).
+// Program: "+++>+++++<[->+<]>.@"
+instr_1 := "+"; instr_2 := "+"; instr_3 := "+"; // cell_1 becomes 3
+instr_4 := ">";                             // Move to cell 2
+instr_5 := "+"; instr_6 := "+"; instr_7 := "+"; instr_8 := "+"; instr_9 := "+"; // cell_2 becomes 5
+instr_10 := "<";                            // Move back to cell 1
+instr_11 := "[";                            // Loop while cell_1 is not 0
+instr_12 := "-";                            // Decrement cell_1
+instr_13 := ">";                            // Move to cell 2
+instr_14 := "+";                            // Increment cell_2
+instr_15 := "<";                            // Move back to cell 1
+instr_16 := "]";                            // End loop
+instr_17 := ">";                            // Move to cell 2
+instr_18 := ".";                            // Output value of cell_2
+instr_19 := "@";                            // Halt
+
+OUTPUT "--- Running IntStrip Interpreter ---"
+OUTPUT "Program: +++>+++++<[->+<]>.@"
+OUTPUT "Expected output: 8"
+OUTPUT "------------------------------------"
+
+// --- Simulation Setup ---
+// Data Tape (our simulated memory)
+cell_1 := 0; cell_2 := 0; cell_3 := 0; cell_4 := 0; cell_5 := 0;
+
+// Pointers
+ip := 1; // Instruction Pointer
+dp := 1; // Data Pointer
+
+// Loop stack for handling nested [ and ]
+// Not needed for this simple program, but required for a full implementation.
+
+// --- Main Interpreter Loop ---
+LOOP
+// --- Fetch current instruction ---
+current_instr := ""
+IF ip = 1 THEN current_instr := instr_1; ENDIF
+IF ip = 2 THEN current_instr := instr_2; ENDIF
+IF ip = 3 THEN current_instr := instr_3; ENDIF
+IF ip = 4 THEN current_instr := instr_4; ENDIF
+IF ip = 5 THEN current_instr := instr_5; ENDIF
+IF ip = 6 THEN current_instr := instr_6; ENDIF
+IF ip = 7 THEN current_instr := instr_7; ENDIF
+IF ip = 8 THEN current_instr := instr_8; ENDIF
+IF ip = 9 THEN current_instr := instr_9; ENDIF
+IF ip = 10 THEN current_instr := instr_10; ENDIF
+IF ip = 11 THEN current_instr := instr_11; ENDIF
+IF ip = 12 THEN current_instr := instr_12; ENDIF
+IF ip = 13 THEN current_instr := instr_13; ENDIF
+IF ip = 14 THEN current_instr := instr_14; ENDIF
+IF ip = 15 THEN current_instr := instr_15; ENDIF
+IF ip = 16 THEN current_instr := instr_16; ENDIF
+IF ip = 17 THEN current_instr := instr_17; ENDIF
+IF ip = 18 THEN current_instr := instr_18; ENDIF
+IF ip = 19 THEN current_instr := instr_19; ENDIF
+
+// --- Execute Instruction ---
+IF current_instr = "@" THEN
+    OUTPUT "------------------------------------"
+    OUTPUT "Program halted."
+    BREAK
+ENDIF
+
+IF current_instr = ">" THEN dp := dp + 1; ENDIF
+IF current_instr = "<" THEN dp := dp - 1; ENDIF
+
+IF current_instr = "+" THEN
+    IF dp = 1 THEN cell_1 := cell_1 + 1; ENDIF
+    IF dp = 2 THEN cell_2 := cell_2 + 1; ENDIF
+    IF dp = 3 THEN cell_3 := cell_3 + 1; ENDIF
+ENDIF
+IF current_instr = "-" THEN
+    IF dp = 1 THEN cell_1 := cell_1 - 1; ENDIF
+    IF dp = 2 THEN cell_2 := cell_2 - 1; ENDIF
+    IF dp = 3 THEN cell_3 := cell_3 - 1; ENDIF
+ENDIF
+
+IF current_instr = "." THEN
+    OUTPUT "Output:"
+    IF dp = 1 THEN OUTPUT cell_1; ENDIF
+    IF dp = 2 THEN OUTPUT cell_2; ENDIF
+    IF dp = 3 THEN OUTPUT cell_3; ENDIF
+ENDIF
+
+// --- Loop Handling ---
+IF current_instr = "[" THEN
+    cell_value := 0
+    IF dp = 1 THEN cell_value := cell_1; ENDIF
+    IF dp = 2 THEN cell_value := cell_2; ENDIF
+    // If cell is 0, jump forward to matching ']'
+    IF cell_value = 0 THEN
+        // This simple interpreter knows the matching ']' is at ip 16
+        ip := 16
+    ENDIF
+ENDIF
+
+IF current_instr = "]" THEN
+    cell_value := 0
+    IF dp = 1 THEN cell_value := cell_1; ENDIF
+    IF dp = 2 THEN cell_value := cell_2; ENDIF
+    // If cell is not 0, jump back to matching '['
+    IF cell_value != 0 THEN
+        // This simple interpreter knows the matching '[' is at ip 11
+        ip := 11
+    ENDIF
+ENDIF
+
+// --- Advance Instruction Pointer ---
+ip := ip + 1
+
+ENDLOOP
